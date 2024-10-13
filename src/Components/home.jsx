@@ -1,76 +1,81 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Table from './Table';
+import ChatWindow from './ChatWindow';
 
 function Home() {
 
-    const data = React.useMemo(
-        () => [
-          { name: "John Doe", age: 28, role: "Developer" },
-          { name: "Jane Smith", age: 34, role: "Designer" },
-          { name: "Mike Johnson", age: 45, role: "Manager" },
-        ],
-        []
-      );
-    
-      const columns = React.useMemo(
-        () => [
-          {
-            Header: "Name",
-            accessor: "name", // accessor is the "key" in the data
-          },
-          {
-            Header: "Age",
-            accessor: "age",
-          },
-          {
-            Header: "Role",
-            accessor: "role",
-          },
-        ],
-        []
-      );
+  const data = React.useMemo(
+    () => [
+      { name: "John Doe", age: 28, role: "Developer" },
+      { name: "Jane Smith", age: 34, role: "Designer" },
+      { name: "Mike Johnson", age: 45, role: "Manager" },
+    ],
+    []
+  );
 
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [uploadStatus, setUploadStatus] = useState('');
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name", // accessor is the "key" in the data
+      },
+      {
+        Header: "Age",
+        accessor: "age",
+      },
+      {
+        Header: "Role",
+        accessor: "role",
+      },
+    ],
+    []
+  );
 
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
-    };
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
 
-    // Handle form submission and file upload
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
 
-        if (!selectedFile) {
-            alert("Please select a file before uploading.");
-            return;
-        }
+  // Handle form submission and file upload
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-        const formData = new FormData();
-        formData.append('file', selectedFile);
+    if (!selectedFile) {
+      alert("Please select a file before uploading.");
+      return;
+    }
 
-        try {
-            // Replace with your own upload URL
-            const response = await axios.post('/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+    const formData = new FormData();
+    formData.append('file', selectedFile);
 
-            setUploadStatus('File uploaded successfully!');
-        } catch (error) {
-            console.error('Error uploading file:', error);
-            setUploadStatus('Error uploading file.');
-        }
-    };
-    return (
-        <form onSubmit={handleSubmit}>
-            <input type="file" onChange={handleFileChange} />
-            <button type="submit">Upload</button>
-            <Table columns={columns} data={data} />
-        </form>
-    );
+    try {
+      // Replace with your own upload URL
+      const response = await axios.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      setUploadStatus('File uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setUploadStatus('Error uploading file.');
+    }
+  };
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <input type="file" onChange={handleFileChange} />
+        <button type="submit">Upload</button>
+        <Table columns={columns} data={data} />
+
+      </form>
+      <ChatWindow />
+    </>
+  );
 }
 
 export default Home;
