@@ -174,7 +174,6 @@ function Home() {
         },
       });
       let datas = [];
-      console.log(response.data);
       datas.push(response.data);
       setData(datas);
     } catch (error) {
