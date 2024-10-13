@@ -1,29 +1,31 @@
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 18px;
-    text-align: left;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-  }
-  
-  .table th,
-  .table td {
-    padding: 12px 15px;
-    border: 1px solid #dee2e6;
-  }
-  
-  .table th {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .table tbody tr {
-    transition: background-color 0.2s ease;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #f1f3f5;
-  }
-  
+.table-container {
+  width: 100%; /* Full width, but can be a fixed width like 600px */
+  height: 400px; /* Fixed height for vertical scrolling */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional border */
+}
+
+/* Optional styling for table, headers, and cells */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures no extra space between table cells */
+}
+
+thead {
+  background-color: #f1f1f1;
+  position: sticky;
+  top: 0;
+  z-index: 1; /* Keeps the header on top while scrolling */
+}
+
+th, td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Add min-width to table columns to force horizontal scroll */
+th, td {
+  min-width: 150px;
+}

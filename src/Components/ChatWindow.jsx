@@ -4,7 +4,7 @@ import './ChatWindow.css';
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
 
   const sendMessage = () => {
     if (input.trim()) {
