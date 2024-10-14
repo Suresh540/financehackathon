@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useTable } from "react-table";
+import * as XLSX from "xlsx";
+import emailjs from 'emailjs-com';
 import "./Table.css";
 
 const Table = ({ columns, data }) => {
@@ -13,7 +15,25 @@ const Table = ({ columns, data }) => {
     columns,
     data,
   });
-  console.log(data[0]);
+
+  const handleExport = () => {
+    // Convert data to worksheet
+    let e = []
+    e.push(data[0].results[0].contract_details);
+
+    const worksheet = XLSX.utils.json_to_sheet(e);
+
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new();
+
+    // Append worksheet to workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    // Export the workbook to Excel file
+    XLSX.writeFile(workbook, "DataSheet.xlsx");
+  }
+
+
   return (
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
@@ -24,23 +44,25 @@ const Table = ({ columns, data }) => {
             style={{ cursor: "pointer", color: "#FF6347", transition: "color 0.3s" }}
             onClick={() => console.log("Email icon clicked!")}
             onMouseEnter={(e) => e.currentTarget.style.color = "#FF4500"}
-            onMouseLeave={(e) => e.currentTarget.style.color = "#FF6347"}
-          ></i>
-
+            onMouseLeave={(e) => e.currentTarget.style.color = "#FF6347"}></i>
           <i className="fas fa-file-excel"
             style={{ cursor: "pointer", color: "#32CD32", transition: "color 0.3s" }}
-            onClick={() => console.log("Export Excel icon clicked!")}
+            onClick={handleExport}
             onMouseEnter={(e) => e.currentTarget.style.color = "#228B22"}
-            onMouseLeave={(e) => e.currentTarget.style.color = "#32CD32"}
-          ></i>
+            onMouseLeave={(e) => e.currentTarget.style.color = "#32CD32"}></i>
         </div>
       </div>
       <table className="table" style={{ paddingTop: "5px", borderCollapse: "collapse", width: "100%", fontFamily: "Arial, sans-serif", marginTop: "10px" }}>
         <thead>
           <tr style={{ backgroundColor: "#6A5ACD", color: "white" }}>
-            <td style={{ padding: "15px", textAlign: "left", fontWeight: "bold", fontSize: "16px" }}>Contract Details</td>
+            <td style={{ padding: "15px", textAlign: "left", fontWeight: "bold", fontSize: "16px",width:'30%' }}>
+              Contract Details
+            </td>
             {data.map((item, index) => (
-              <td key={index} style={{ padding: "15px", textAlign: "center", fontWeight: "bold", fontSize: "16px" }}>&nbsp;</td>
+              <td key={index} style={{ padding: "15px", textAlign: "center", fontWeight: "bold", 
+              fontSize: "16px", width:'70%' }}>
+                &nbsp;
+              </td>
             ))}
           </tr>
         </thead>
