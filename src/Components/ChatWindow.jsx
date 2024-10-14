@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './ChatWindow.css';
 import axios from 'axios';
 
-
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -11,9 +10,21 @@ const ChatWindow = () => {
   const [selectedOption, setSelectedOption] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  let url = apiUrl + "/chat/MK231582 -1";
-
-  
+  let url = apiUrl + "/chat/{0}";
+  let files = [
+    "SG222341_Fixed Bid.pdf",
+    "MK231582_SW.pdf",
+    "renam.pdf",
+    "NewFile3.pdf",
+    "rename.pdf",
+    "NewFile1.pdf",
+    "SG222341_Fixed Bid520.docx",
+    "MG206855_SaaS.pdf",
+    "NY222079_SaaS_Fixed_Bid123.pdf",
+    "MK231582_SW_25.pdf",
+    "NY222079_SaaS_Fixed_Bid.pdf",
+    "1.pdf"
+  ]
 
   const sendMessage = () => {
     if (input.trim()) {
@@ -21,10 +32,11 @@ const ChatWindow = () => {
       setInput('');
       // Simulate a response
       setTimeout(async () => {
-        url += "?message=" + input
+        url = url.replaceAll("{0}",selectedOption)+ "?message=" + input.replace(' ','%20');
+        console.log(url);
         const response = await axios.post(url);
-        console.log(response);
-        setMessages((prevMessages) => [...prevMessages, { text: 'This is a response.', sender: 'bot' }]);
+        console.log(response.data.response);
+        setMessages((prevMessages) => [...prevMessages, { text: response.data.response, sender: 'bot' }]);
       }, 1000);
     }
   };
@@ -55,9 +67,9 @@ const ChatWindow = () => {
           <div className="input-container">
             <select value={selectedOption} onChange={handleChange}>
               <option value="" disabled>Select an option</option>
-              {options.map(option => (
-                <option key={option.id} value={option.value}>
-                  {option.label}
+              {files.map(option => (
+                <option key={option} value={option}>
+                  {option}
                 </option>
               ))}
             </select>

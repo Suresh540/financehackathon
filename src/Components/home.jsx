@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Table from './Table';
 import ChatWindow from './ChatWindow';
+import ContractDetailsTable from './TableHor';
 
 function Home() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [data, setData] = useState(null);
+  const [files, setSelectedFile] = useState([]);
+  const [data, setData] = useState([]);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   let ul = apiUrl + '/files';
@@ -16,13 +17,13 @@ function Home() {
         const response = await axios.get(ul, {
           headers: {
             'Content-Type': 'application/json',
+            'Accept':'application/json',
           },
         });
-
         console.log('Response Status:', response.status);
-        console.log('Response Data:', response.data);
+        console.log('Response Data:', response);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error(error);
       }
     };
     fetchData();
@@ -172,19 +173,21 @@ function Home() {
   ];
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    setSelectedFile(event.target.files);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!selectedFile) {
+    if (!files) {
       alert("Please select a file before uploading.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('files', selectedFile);
+    Array.from(files).forEach(file => {
+      formData.append('files', file); // Use the same key for multiple files
+    });
 
     try {
       let url = apiUrl + "/extract";
@@ -195,6 +198,7 @@ function Home() {
       });
       let datas = [];
       datas.push(response.data);
+      console.log(response.data);
       setData(datas);
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -204,9 +208,10 @@ function Home() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} />
+        <input type="file" multiple onChange={handleFileChange} />
         <button type="submit">Upload</button>
-        {data != null ? <Table columns={columns} data={data} /> : <></>}
+        {/* {data != null ? <Table columns={columns} data={data} /> : <></>} */}
+        {data != null ? <ContractDetailsTable data={data} /> : <></>} 
       </form>
       <ChatWindow />
     </>

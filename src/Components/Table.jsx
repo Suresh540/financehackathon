@@ -33,7 +33,6 @@ const Table = ({ columns, data }) => {
     XLSX.writeFile(workbook, "DataSheet.xlsx");
   }
 
-
   return (
     <>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
@@ -55,12 +54,14 @@ const Table = ({ columns, data }) => {
       <table className="table" style={{ paddingTop: "5px", borderCollapse: "collapse", width: "100%", fontFamily: "Arial, sans-serif", marginTop: "10px" }}>
         <thead>
           <tr style={{ backgroundColor: "#6A5ACD", color: "white" }}>
-            <td style={{ padding: "15px", textAlign: "left", fontWeight: "bold", fontSize: "16px",width:'30%' }}>
+            <td style={{ padding: "15px", textAlign: "left", fontWeight: "bold", fontSize: "16px", width: '30%' }}>
               Contract Details
             </td>
             {data.map((item, index) => (
-              <td key={index} style={{ padding: "15px", textAlign: "center", fontWeight: "bold", 
-              fontSize: "16px", width:'70%' }}>
+              <td key={index} style={{
+                padding: "15px", textAlign: "center", fontWeight: "bold",
+                fontSize: "16px", width: '70%'
+              }}>
                 &nbsp;
               </td>
             ))}
@@ -68,6 +69,7 @@ const Table = ({ columns, data }) => {
         </thead>
         <tbody>
           {[
+             {label: "File Name(s)", key: "file_name" },
             { label: "Vendor Name", key: "vendor_name" },
             { label: "Contract ID", key: "contract_id" },
             { label: "Start Date", key: "start_date" },
@@ -107,7 +109,13 @@ const Table = ({ columns, data }) => {
                   padding: "12px", textAlign: "left", color: "#333", borderBottom: "1px solid #ddd",
                   boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)", transition: "background-color 0.3s ease"
                 }}>
-                  {item.results[0].contract_details[row.key]}
+                  {item.results.map((result, index) => (
+                    row.key !='file_name'?(
+                    <div key={index}>{result.contract_details[row.key]}</div>
+                    ):(
+                      <div key={index}>{result.file_name}</div>
+                      )
+                  ))}
                 </td>
               ))}
             </tr>
