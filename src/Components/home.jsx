@@ -31,14 +31,16 @@ function Home() {
 
     try {
       let url = apiUrl + "/extract";
+      console.log(url);
       const response = await axios.post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       let datas = [];
+
       datas.push(response.data);
-      console.log(response.data);
+      console.log(response);
       setData(datas);
       setLoading(false);
     } catch (error) {
@@ -55,7 +57,7 @@ function Home() {
             Load from Ariba
           </button>
           <button className="gradient-button">
-            Load from TFT
+            Load from VRM
           </button>
         </div>
         <div style={{marginBottom:'5px'}}>

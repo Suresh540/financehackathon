@@ -42,7 +42,7 @@ function App() {
               ))} 
             </ul>
           </nav>
-          <div className="content">
+          <div className="content" style={{minHeight:"72.7vh"}}>
             <Routes>
               <Route path="/" Component={Home}/>
               <Route path="/profile" Component={Profile}/>
