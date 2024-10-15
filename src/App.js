@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from './Components/home';
 import Profile from './Components/profile';
 
+
 function App() {
   const [activeItem, setActiveItem] = useState("home");
   const menuItems = [
@@ -21,7 +22,7 @@ function App() {
           borderBottom: "3px solid yellow", textAlign: "left", padding: "4px"
         }}>
           <span style={{ color: "white", fontSize: "30px" }}>
-            WELLS FARGO
+            WELLS FARGO - FITC Tool
           </span>
         </div>
       </header>

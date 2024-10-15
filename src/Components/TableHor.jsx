@@ -1,29 +1,27 @@
 import React from 'react';
 import './TableHor.css';
 import * as XLSX from "xlsx";
-import emailjs from 'emailjs-com';
 
 const ContractDetailsTable = ({ data }) => {
-
     const handleExport = () => {
         // Convert data to worksheet
         let e = []
 
-        data[0].results.map(x=>{
+        data[0].results.map(x => {
             e.push(x.contract_details);
         })
-    
+
         const worksheet = XLSX.utils.json_to_sheet(e);
-    
+
         // Create a new workbook
         const workbook = XLSX.utils.book_new();
-    
+
         // Append worksheet to workbook
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    
+
         // Export the workbook to Excel file
         XLSX.writeFile(workbook, "DataSheet.xlsx");
-      }
+    }
 
     let columns = [
         { label: 'File Name(s)', key: 'file_name' },
@@ -54,7 +52,7 @@ const ContractDetailsTable = ({ data }) => {
         { label: 'Change in Scope ($$ Terms)', key: 'change_in_scope_in_$$_terms' },
         { label: 'Volume-Driven YoY Scope Change?', key: 'whether_YoY_change_in_scope_is_volume_driven' },
         { label: 'YoY Change in Active Months', key: 'YoY_change_in_active_months_of_contract' },
-        { label: 'CPI Impact on Product/Service Cost', key: 'Increase_in_the_cost_of_product_service_as_agreed_to_in_the_contract_with_vendor_CPI_impact_$$' },
+        { label: 'CPI Impact on Product/Service Cost', key: 'Increase_in_the_cost_of_product_service_as_agreed_to_in_the_contract_with_vendor_CPI_impact_$' },
         { label: "Change in Next Year's Rate/Expense", key: 'If_there_is_a_change_in_rate_expense_mentioned_in_the_contract_for_next_year' },
     ];
     return (
@@ -75,40 +73,42 @@ const ContractDetailsTable = ({ data }) => {
                         onMouseLeave={(e) => e.currentTarget.style.color = "#32CD32"}></i>
                 </div>
             </div>
-            <table style={{ width: '70%', margin: '20px auto', borderCollapse: 'collapse', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
-                <thead>
-                    <tr style={{ backgroundColor: '#6A5ACD', color: 'white' }}>
-                        <td style={{ padding: '15px', fontWeight: 'bold' }}>Serial No.</td>
-                        {columns.map((item, index) => (
-                            <td key={index} style={{ padding: '15px', fontWeight: 'bold', borderBottom: '2px solid #ddd' }}>
-                                {item.label}
-                            </td>
+            <div className="table-wrapper">
+                <table className="scrollable-table">
+                    <thead>
+                        <tr style={{ backgroundColor: 'red', color: 'white' }}>
+                            <td style={{ padding: '15px', fontWeight: 'bold' }}>Serial No.</td>
+                            {columns.map((item, index) => (
+                                <td key={index} style={{ padding: '15px', fontWeight: 'bold', borderBottom: '2px solid #ddd' }}>
+                                    {item.label}
+                                </td>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.map((item, itemIndex) => (
+                            item.results.map((result, resultIndex) => (
+                                <tr
+                                    key={`${itemIndex}-${resultIndex}`}
+                                    style={{
+                                        backgroundColor: resultIndex % 2 === 0 ? '#FFFAF0' : '#F0F8FF',
+                                        transition: 'background-color 0.3s ease'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E6E6FA'} // Light purple on hover
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = resultIndex % 2 === 0 ? '#FFFAF0' : '#F0F8FF'} // Revert on mouse leave
+                                >
+                                    <td style={{ padding: '12px', textAlign: 'center' }}>{resultIndex + 1}</td>
+                                    {columns.map((column, colIndex) => (
+                                        <td key={colIndex} style={{ padding: '12px', textAlign: 'left', color: '#333', borderBottom: '1px solid #ddd' }}>
+                                            {column.key !== 'file_name' ? result.contract_details[column.key] : result.file_name}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((item, itemIndex) => (
-                        item.results.map((result, resultIndex) => (
-                            <tr
-                                key={`${itemIndex}-${resultIndex}`}
-                                style={{
-                                    backgroundColor: resultIndex % 2 === 0 ? '#FFFAF0' : '#F0F8FF',
-                                    transition: 'background-color 0.3s ease'
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E6E6FA'} // Light purple on hover
-                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = resultIndex % 2 === 0 ? '#FFFAF0' : '#F0F8FF'} // Revert on mouse leave
-                            >
-                                <td style={{ padding: '12px', textAlign: 'center' }}>{resultIndex + 1}</td>
-                                {columns.map((column, colIndex) => (
-                                    <td key={colIndex} style={{ padding: '12px', textAlign: 'left', color: '#333', borderBottom: '1px solid #ddd' }}>
-                                        {column.key !== 'file_name' ? result.contract_details[column.key] : result.file_name}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))
-                    ))}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </>
 
     );

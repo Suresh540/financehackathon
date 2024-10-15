@@ -1,42 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import './ChatWindow.css';
 import axios from 'axios';
+import './Spinner.css';
 
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
+  const[files, setFiles] = useState([]);
   const [input, setInput] = useState('');
   const [isMinimized, setIsMinimized] = useState(true);
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   let url = apiUrl + "/chat/{0}";
-  let files = [
-    "SG222341_Fixed Bid.pdf",
-    "MK231582_SW.pdf",
-    "renam.pdf",
-    "NewFile3.pdf",
-    "rename.pdf",
-    "NewFile1.pdf",
-    "SG222341_Fixed Bid520.docx",
-    "MG206855_SaaS.pdf",
-    "NY222079_SaaS_Fixed_Bid123.pdf",
-    "MK231582_SW_25.pdf",
-    "NY222079_SaaS_Fixed_Bid.pdf",
-    "1.pdf"
-  ]
+
+  const fetchData = async () => {
+    try {
+      let ul = apiUrl + '/files';
+      const response = await axios.post(ul, {
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+      setFiles(response.data.files);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  setTimeout(() => {
+    fetchData();
+  }, 1000);
 
   const sendMessage = () => {
     if (input.trim()) {
       setMessages([...messages, { text: input, sender: 'user' }]);
+      setLoading(true);
       setInput('');
       // Simulate a response
       setTimeout(async () => {
-        url = url.replaceAll("{0}",selectedOption)+ "?message=" + input.replace(' ','%20');
-        console.log(url);
+        url = url.replaceAll("{0}", selectedOption) + "?message=" + input.replaceAll(' ', '%20');
         const response = await axios.post(url);
-        console.log(response.data.response);
         setMessages((prevMessages) => [...prevMessages, { text: response.data.response, sender: 'bot' }]);
+        setLoading(false);
       }, 1000);
     }
   };
@@ -44,7 +51,7 @@ const ChatWindow = () => {
   const handleChange = (e) => {
     setSelectedOption(e.target.value);
   };
-  
+
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
@@ -59,7 +66,7 @@ const ChatWindow = () => {
         <div className="chat-window">
           <div className="messages">
             {messages.map((msg, index) => (
-              <div key={index} className={`message ${msg.sender}`}>
+              <div key={index} className={`message ${msg.sender}`} style={{textAlign:"left"}}>
                 {msg.text}
               </div>
             ))}
@@ -81,7 +88,9 @@ const ChatWindow = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type a message..."
             />
-            <button onClick={sendMessage}>Send</button>
+            {loading ? (<div className="overlay">
+              <div className="spinner"></div>
+            </div>) : <button onClick={sendMessage}>Send</button>}
           </div>
 
         </div>
