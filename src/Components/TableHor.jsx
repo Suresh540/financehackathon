@@ -1,6 +1,7 @@
 import React from 'react';
 import './TableHor.css';
 import * as XLSX from "xlsx";
+import PowerBiIcon from '../power-bi-icon.svg';
 
 const ContractDetailsTable = ({ data }) => {
     const handleExport = () => {
@@ -61,25 +62,26 @@ const ContractDetailsTable = ({ data }) => {
                 <h2 style={{ margin: "0", color: "#6A5ACD" }}>Contract Information</h2>
 
                 <div style={{ display: "flex", gap: "20px", fontSize: "24px", color: "#333" }}>
-                    <i className="fas fa-envelope"
+                    <img src={PowerBiIcon} title='Power BI' alt="Power BI" width="25px" height="25px" />
+                    <i className="fas fa-envelope" title='Send Email'
                         style={{ cursor: "pointer", color: "#FF6347", transition: "color 0.3s" }}
                         onClick={() => console.log("Email icon clicked!")}
                         onMouseEnter={(e) => e.currentTarget.style.color = "#FF4500"}
                         onMouseLeave={(e) => e.currentTarget.style.color = "#FF6347"}></i>
-                    <i className="fas fa-file-excel"
+                    <i className="fas fa-file-excel" title='Export Excel'
                         style={{ cursor: "pointer", color: "#32CD32", transition: "color 0.3s" }}
                         onClick={handleExport}
                         onMouseEnter={(e) => e.currentTarget.style.color = "#228B22"}
                         onMouseLeave={(e) => e.currentTarget.style.color = "#32CD32"}></i>
                 </div>
             </div>
-            <div className="table-wrapper">
-                <table className="scrollable-table">
+            <div style={{ maxHeight: '400px', overflowY: 'auto', overflowX: 'auto' }}>
+                <table className="scrollable-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ backgroundColor: 'red', color: 'white' }}>
                             <td style={{ padding: '15px', fontWeight: 'bold' }}>Serial No.</td>
                             {columns.map((item, index) => (
-                                <td key={index} style={{ padding: '15px', fontWeight: 'bold', borderBottom: '2px solid #ddd' }}>
+                                <td key={index} style={{ padding: '15px', fontWeight: 'bold', borderBottom: '2px solid #ddd', position: 'sticky', top: 0 }}>
                                     {item.label}
                                 </td>
                             ))}
@@ -94,8 +96,8 @@ const ContractDetailsTable = ({ data }) => {
                                         backgroundColor: resultIndex % 2 === 0 ? '#FFFAF0' : '#F0F8FF',
                                         transition: 'background-color 0.3s ease'
                                     }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E6E6FA'} // Light purple on hover
-                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = resultIndex % 2 === 0 ? '#FFFAF0' : '#F0F8FF'} // Revert on mouse leave
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E6E6FA'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = resultIndex % 2 === 0 ? '#FFFAF0' : '#F0F8FF'}
                                 >
                                     <td style={{ padding: '12px', textAlign: 'center' }}>{resultIndex + 1}</td>
                                     {columns.map((column, colIndex) => (
@@ -110,7 +112,6 @@ const ContractDetailsTable = ({ data }) => {
                 </table>
             </div>
         </>
-
     );
 };
 

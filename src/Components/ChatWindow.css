@@ -98,4 +98,24 @@
   .minimized .chat-header {
     border-radius: 10px;
   }
+
+  .show-hide-icon {
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 1.2em;
+  }
+
+  .toggle-chat-button {
+    position: fixed;
+    bottom: 30px; /* Distance from the bottom of the page */
+    right: 50px; /* Distance from the right edge of the page */
+    font-size: 20px; /* Font size for the icon */
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    z-index: 1000; /* Ensure it stays above other elements */
+  }
+  
+  
   
